@@ -1,0 +1,80 @@
+{% load djicons i18n %}
+
+<div x-data="{
+    panelOpen: false,
+    deleteConfirm: false,
+    deleteTarget: null,
+    openPanel(url) {
+        htmx.ajax('GET', url, { target: '#form-panel-content', swap: 'innerHTML' });
+        this.panelOpen = true;
+    },
+    closePanel() {
+        this.panelOpen = false;
+    },
+    confirmDelete() {
+        if (this.deleteTarget) {
+            htmx.ajax('POST', this.deleteTarget.url, {
+                target: '#forms-list-body',
+                swap: 'innerHTML',
+                headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '{{ csrf_token }}' }
+            });
+        }
+        this.deleteConfirm = false;
+        this.deleteTarget = null;
+    }
+}">
+
+    <div class="p-4">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold">{% trans "Feedback Forms" %}</h2>
+            <button class="btn btn-sm color-primary"
+                    @click="openPanel('{% url 'feedback:form_add' %}')">
+                {% icon "add-outline" %}
+                {% trans "New Form" %}
+            </button>
+        </div>
+
+        {% csrf_token %}
+
+        <!-- Forms List -->
+        <div id="forms-list-body">
+            {% include "feedback/partials/forms_list_items.html" %}
+        </div>
+    </div>
+
+    <!-- Side Sheet -->
+    <div class="sheet-backdrop" :class="{ 'is-open': panelOpen }" @click.self="closePanel()">
+        <div class="side-sheet side-sheet-right" id="form-panel-content">
+            <!-- Content loaded via HTMX -->
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-backdrop" :data-state="deleteConfirm ? 'open' : 'closed'" @click.self="deleteConfirm = false; deleteTarget = null">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">{% trans "Delete Form" %}</h3>
+                <button class="modal-close" @click="deleteConfirm = false; deleteTarget = null">
+                    {% icon "close-outline" %}
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-sm text-base-content/70">
+                    {% trans "Are you sure you want to delete" %} <strong x-text="deleteTarget?.name"></strong>?
+                    {% trans "All associated responses will also be affected." %}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost btn-sm" @click="deleteConfirm = false; deleteTarget = null">
+                    {% trans "Cancel" %}
+                </button>
+                <button class="btn btn-sm color-error" @click="confirmDelete()">
+                    {% icon "trash-outline" %}
+                    {% trans "Delete" %}
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

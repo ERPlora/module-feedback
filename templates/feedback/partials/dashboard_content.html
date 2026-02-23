@@ -1,0 +1,335 @@
+{% load djicons i18n %}
+
+<div class="p-4">
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+        <!-- NPS Score -->
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center {% if nps_score is not None %}{% if nps_score >= 50 %}bg-success/10{% elif nps_score >= 0 %}bg-warning/10{% else %}bg-error/10{% endif %}{% else %}bg-base-200{% endif %}">
+                        {% icon "analytics-outline" css_class="text-2xl" %}
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm text-base-content/60">{% trans "NPS Score" %}</div>
+                        {% if nps_score is not None %}
+                        <div class="text-2xl font-semibold {% if nps_score >= 50 %}text-success{% elif nps_score >= 0 %}text-warning{% else %}text-error{% endif %}">
+                            {{ nps_score }}
+                        </div>
+                        {% else %}
+                        <div class="text-2xl font-semibold text-base-content/30">--</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Rating -->
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-warning/10 rounded-xl flex items-center justify-center">
+                        {% icon "star-outline" css_class="text-2xl text-warning" %}
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm text-base-content/60">{% trans "Avg. Rating" %}</div>
+                        {% if avg_rating is not None %}
+                        <div class="text-2xl font-semibold">{{ avg_rating }}<span class="text-sm text-base-content/40">/5</span></div>
+                        {% else %}
+                        <div class="text-2xl font-semibold text-base-content/30">--</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Responses This Month -->
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                        {% icon "chatbubbles-outline" css_class="text-2xl text-primary" %}
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm text-base-content/60">{% trans "This Month" %}</div>
+                        <div class="text-2xl font-semibold">{{ total_this_month }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Rate -->
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center">
+                        {% icon "checkmark-circle-outline" css_class="text-2xl text-success" %}
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm text-base-content/60">{% trans "Response Rate" %}</div>
+                        <div class="text-2xl font-semibold">{{ response_rate }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Second Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+
+        <!-- NPS Breakdown -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% icon "pie-chart-outline" css_class="text-primary" %}
+                    {% trans "NPS Breakdown" %}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if nps_total > 0 %}
+                <div class="flex flex-col gap-3">
+                    <!-- Promoters -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-success"></span>
+                            <span class="text-sm">{% trans "Promoters" %} (9-10)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-medium">{{ nps_promoters }}</span>
+                            <span class="badge badge-sm color-success">{% widthratio nps_promoters nps_total 100 %}%</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-base-200 rounded-full h-2">
+                        <div class="bg-success rounded-full h-2" style="width: {% widthratio nps_promoters nps_total 100 %}%"></div>
+                    </div>
+
+                    <!-- Passives -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-warning"></span>
+                            <span class="text-sm">{% trans "Passives" %} (7-8)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-medium">{{ nps_passives }}</span>
+                            <span class="badge badge-sm color-warning">{% widthratio nps_passives nps_total 100 %}%</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-base-200 rounded-full h-2">
+                        <div class="bg-warning rounded-full h-2" style="width: {% widthratio nps_passives nps_total 100 %}%"></div>
+                    </div>
+
+                    <!-- Detractors -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-error"></span>
+                            <span class="text-sm">{% trans "Detractors" %} (0-6)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-medium">{{ nps_detractors }}</span>
+                            <span class="badge badge-sm color-error">{% widthratio nps_detractors nps_total 100 %}%</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-base-200 rounded-full h-2">
+                        <div class="bg-error rounded-full h-2" style="width: {% widthratio nps_detractors nps_total 100 %}%"></div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-6 text-base-content/50">
+                    {% icon "analytics-outline" css_class="text-3xl mb-2" %}
+                    <p class="text-sm">{% trans "No NPS data yet" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Rating Distribution -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% icon "star-outline" css_class="text-warning" %}
+                    {% trans "Rating Distribution" %}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if rating_dist %}
+                <div class="flex flex-col gap-3">
+                    {% for item in rating_dist reversed %}
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1 w-16 justify-end">
+                            <span class="text-sm font-medium">{{ item.score }}</span>
+                            {% icon "star" css_class="text-warning text-sm" %}
+                        </div>
+                        <div class="flex-1 bg-base-200 rounded-full h-3">
+                            <div class="rounded-full h-3 {% if item.score >= 4 %}bg-success{% elif item.score == 3 %}bg-warning{% else %}bg-error{% endif %}" style="width: {{ item.percent }}%"></div>
+                        </div>
+                        <span class="text-xs text-base-content/60 w-12 text-right">{{ item.count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-6 text-base-content/50">
+                    {% icon "star-outline" css_class="text-3xl mb-2" %}
+                    <p class="text-sm">{% trans "No rating data yet" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- NPS Trend (Last 6 Months) -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% icon "trending-up-outline" css_class="text-success" %}
+                    {% trans "NPS Trend" %}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if nps_trend %}
+                <div class="flex items-end gap-2 h-32">
+                    {% for item in nps_trend %}
+                    <div class="flex-1 flex flex-col items-center gap-1">
+                        {% if item.has_data %}
+                        <span class="text-xs font-medium {% if item.nps >= 50 %}text-success{% elif item.nps >= 0 %}text-warning{% else %}text-error{% endif %}">{{ item.nps }}</span>
+                        <div class="w-full rounded-t {% if item.nps >= 50 %}bg-success{% elif item.nps >= 0 %}bg-warning{% else %}bg-error{% endif %}"
+                             style="height: {% if item.nps >= 0 %}{{ item.nps }}{% else %}5{% endif %}%; min-height: 4px; max-height: 100%;">
+                        </div>
+                        {% else %}
+                        <span class="text-xs text-base-content/30">--</span>
+                        <div class="w-full bg-base-200 rounded-t" style="height: 4px;"></div>
+                        {% endif %}
+                        <span class="text-xs text-base-content/50">{{ item.month }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-6 text-base-content/50">
+                    {% icon "trending-up-outline" css_class="text-3xl mb-2" %}
+                    <p class="text-sm">{% trans "No trend data yet" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sentiment Overview -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-success/10 rounded-xl flex items-center justify-center">
+                        {% icon "happy-outline" css_class="text-xl text-success" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Positive" %}</div>
+                        <div class="text-xl font-semibold text-success">{{ positive_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-warning/10 rounded-xl flex items-center justify-center">
+                        {% icon "remove-circle-outline" css_class="text-xl text-warning" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Neutral" %}</div>
+                        <div class="text-xl font-semibold text-warning">{{ neutral_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-error/10 rounded-xl flex items-center justify-center">
+                        {% icon "sad-outline" css_class="text-xl text-error" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Negative" %}</div>
+                        <div class="text-xl font-semibold text-error">{{ negative_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Responses -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                {% icon "chatbubbles-outline" css_class="text-primary" %}
+                {% trans "Recent Responses" %}
+            </h3>
+            <button class="btn btn-ghost btn-sm"
+                    hx-get="{% url 'feedback:responses' %}"
+                    hx-target="#main-content-area"
+                    hx-push-url="true">
+                {% trans "View All" %}
+                {% icon "chevron-forward-outline" %}
+            </button>
+        </div>
+        <div class="card-body p-0">
+            {% if recent_responses %}
+            <div class="list">
+                {% for resp in recent_responses %}
+                <div class="list-item">
+                    <div class="list-item-start">
+                        {% if resp.form.form_type == 'stars_5' or resp.form.form_type == 'rating_5' %}
+                        <div class="flex items-center gap-0.5">
+                            {% for i in "12345" %}
+                            {% if resp.score is not None and forloop.counter <= resp.score %}
+                            {% icon "star" css_class="text-warning text-sm" %}
+                            {% else %}
+                            {% icon "star-outline" css_class="text-base-content/20 text-sm" %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% elif resp.form.form_type == 'nps_10' %}
+                        <span class="badge {{ resp.score_badge_color }}">{{ resp.score }}</span>
+                        {% elif resp.form.form_type == 'thumbs' %}
+                        {% if resp.score == 1 %}
+                        {% icon "thumbs-up" css_class="text-success text-xl" %}
+                        {% else %}
+                        {% icon "thumbs-down" css_class="text-error text-xl" %}
+                        {% endif %}
+                        {% else %}
+                        {% icon "chatbubble-outline" css_class="text-primary text-xl" %}
+                        {% endif %}
+                    </div>
+                    <div class="list-item-content">
+                        <div class="list-item-label">
+                            {% if resp.customer %}{{ resp.customer.name }}{% else %}{% trans "Anonymous" %}{% endif %}
+                            <span class="badge badge-sm {{ resp.status_badge_color }} ml-1">{{ resp.get_status_display }}</span>
+                        </div>
+                        <div class="list-item-note">
+                            {% if resp.comment %}{{ resp.comment|truncatewords:12 }}{% else %}{{ resp.form.name }}{% endif %}
+                        </div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="text-xs text-base-content/50">{{ resp.created_at|timesince }} {% trans "ago" %}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="p-6 text-center text-base-content/50">
+                {% icon "chatbubbles-outline" css_class="text-3xl mb-2" %}
+                <p class="text-sm">{% trans "No responses yet. Create a feedback form to get started." %}</p>
+                <button class="btn btn-sm color-primary mt-3"
+                        hx-get="{% url 'feedback:forms' %}"
+                        hx-target="#main-content-area"
+                        hx-push-url="true">
+                    {% icon "add-outline" %}
+                    {% trans "Create Form" %}
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>

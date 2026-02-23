@@ -1,0 +1,250 @@
+{% load djicons i18n %}
+
+<div class="p-4">
+
+    <!-- Overview Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                        {% icon "chatbubbles-outline" css_class="text-2xl text-primary" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Total Responses" %}</div>
+                        <div class="text-2xl font-semibold">{{ total_responses }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center">
+                        {% icon "document-text-outline" css_class="text-2xl text-success" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Active Forms" %}</div>
+                        <div class="text-2xl font-semibold text-success">{{ total_forms }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-warning/10 rounded-xl flex items-center justify-center">
+                        {% icon "notifications-outline" css_class="text-2xl text-warning" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Pending Review" %}</div>
+                        <div class="text-2xl font-semibold text-warning">{{ new_responses }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Form -->
+    <form hx-post="{% url 'feedback:settings' %}"
+          hx-target="#main-content-area"
+          hx-push-url="false">
+        {% csrf_token %}
+
+        <!-- Automation Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "flash-outline" css_class="text-primary" %} {% trans "Automation" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <!-- Auto-send after sale -->
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Auto-send after sale" %}</div>
+                            <div class="list-item-note">{% trans "Automatically request feedback after a completed sale" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <label class="toggle color-primary">
+                                <input type="checkbox" name="auto_send_post_sale"
+                                       {% if settings_obj.auto_send_post_sale %}checked{% endif %}>
+                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Auto-send after appointment -->
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Auto-send after appointment" %}</div>
+                            <div class="list-item-note">{% trans "Automatically request feedback after a completed appointment" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <label class="toggle color-primary">
+                                <input type="checkbox" name="auto_send_post_appointment"
+                                       {% if settings_obj.auto_send_post_appointment %}checked{% endif %}>
+                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Default Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "document-text-outline" css_class="text-success" %} {% trans "Default Form" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Default Feedback Form" %}</div>
+                            <div class="list-item-note">{% trans "Form used when auto-sending feedback requests" %}</div>
+                        </div>
+                        <div class="list-item-end" style="min-width: 200px;">
+                            <select name="default_form" class="select select-sm w-full">
+                                <option value="">{% trans "-- No default --" %}</option>
+                                {% for form in active_forms %}
+                                <option value="{{ form.id }}"
+                                        {% if settings_obj.default_form_id == form.id %}selected{% endif %}>
+                                    {{ form.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rate Limiting -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "timer-outline" css_class="text-warning" %} {% trans "Rate Limiting" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Minimum days between requests" %}</div>
+                            <div class="list-item-note">{% trans "Prevent sending feedback requests too frequently to the same customer" %}</div>
+                        </div>
+                        <div class="list-item-end" style="min-width: 120px;">
+                            <div class="flex items-center gap-2">
+                                <input type="number" name="minimum_days_between_requests"
+                                       class="input input-sm w-20 text-center"
+                                       value="{{ settings_obj.minimum_days_between_requests }}"
+                                       min="1" max="365">
+                                <span class="text-sm text-base-content/60">{% trans "days" %}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end">
+            <button type="submit" class="btn color-primary">
+                {% icon "save-outline" %}
+                {% trans "Save Settings" %}
+            </button>
+        </div>
+    </form>
+
+    <!-- Quick Actions -->
+    <div class="card mt-6">
+        <div class="card-header">
+            <h3 class="card-title">{% icon "flash-outline" css_class="text-primary" %} {% trans "Quick Actions" %}</h3>
+        </div>
+        <div class="card-body p-0">
+            <div class="list">
+                <button class="list-item list-item-clickable"
+                        hx-get="{% url 'feedback:dashboard' %}"
+                        hx-target="#main-content-area"
+                        hx-push-url="true">
+                    <div class="list-item-start">
+                        {% icon "speedometer-outline" css_class="text-xl text-primary" %}
+                    </div>
+                    <div class="list-item-content">
+                        <div class="list-item-label">{% trans "View Dashboard" %}</div>
+                        <div class="list-item-note">{% trans "See NPS scores, ratings, and response trends" %}</div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="list-item-chevron"></span>
+                    </div>
+                </button>
+                <button class="list-item list-item-clickable"
+                        hx-get="{% url 'feedback:responses' %}"
+                        hx-target="#main-content-area"
+                        hx-push-url="true">
+                    <div class="list-item-start">
+                        {% icon "chatbubbles-outline" css_class="text-xl text-success" %}
+                    </div>
+                    <div class="list-item-content">
+                        <div class="list-item-label">{% trans "View All Responses" %}</div>
+                        <div class="list-item-note">{% trans "Browse and manage customer feedback" %}</div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="list-item-chevron"></span>
+                    </div>
+                </button>
+                <button class="list-item list-item-clickable"
+                        hx-get="{% url 'feedback:forms' %}"
+                        hx-target="#main-content-area"
+                        hx-push-url="true">
+                    <div class="list-item-start">
+                        {% icon "document-text-outline" css_class="text-xl text-warning" %}
+                    </div>
+                    <div class="list-item-content">
+                        <div class="list-item-label">{% trans "Manage Forms" %}</div>
+                        <div class="list-item-note">{% trans "Create and edit feedback forms" %}</div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="list-item-chevron"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3 class="card-title">{% icon "server-outline" css_class="text-warning" %} {% trans "Data Management" %}</h3>
+        </div>
+        <div class="card-body p-0">
+            <div class="list">
+                <div class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-label">{% trans "Total Responses" %}</div>
+                        <div class="list-item-note">{% trans "All feedback responses in the database" %}</div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="badge color-primary">{{ total_responses }}</span>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-label">{% trans "Feedback Forms" %}</div>
+                        <div class="list-item-note">{% trans "Number of configured forms" %}</div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="badge color-success">{{ total_forms }}</span>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-label">{% trans "Pending Review" %}</div>
+                        <div class="list-item-note">{% trans "Responses that haven't been reviewed" %}</div>
+                    </div>
+                    <div class="list-item-end">
+                        <span class="badge color-warning">{{ new_responses }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

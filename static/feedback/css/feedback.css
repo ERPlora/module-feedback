@@ -1,0 +1,174 @@
+/*
+ * Feedback Module Styles
+ *
+ * Module-specific styles that extend ux components.
+ * Most styling comes from ux CSS library classes.
+ */
+
+/* NPS Gauge display */
+.feedback-nps-gauge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.feedback-nps-gauge.nps-excellent {
+    background-color: color-mix(in srgb, var(--color-success) 15%, transparent);
+    color: var(--color-success);
+}
+
+.feedback-nps-gauge.nps-good {
+    background-color: color-mix(in srgb, var(--color-warning) 15%, transparent);
+    color: var(--color-warning);
+}
+
+.feedback-nps-gauge.nps-poor {
+    background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
+    color: var(--color-error);
+}
+
+/* Star rating display (inline) */
+.feedback-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.feedback-stars .star-filled {
+    color: var(--color-warning);
+}
+
+.feedback-stars .star-empty {
+    color: var(--color-base-300);
+}
+
+/* Score number display */
+.feedback-score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.feedback-score-display .score-value {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.feedback-score-display .score-label {
+    font-size: 0.75rem;
+    color: var(--color-base-content);
+    opacity: 0.6;
+    margin-top: 0.25rem;
+}
+
+/* Rating distribution bars */
+.feedback-rating-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feedback-rating-bar .bar-label {
+    min-width: 3rem;
+    text-align: right;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.feedback-rating-bar .bar-track {
+    flex: 1;
+    height: 0.75rem;
+    background-color: var(--color-base-200);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.feedback-rating-bar .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.feedback-rating-bar .bar-count {
+    min-width: 2rem;
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--color-base-content);
+    opacity: 0.6;
+}
+
+/* Trend chart bars */
+.feedback-trend-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.feedback-trend-bar .trend-value {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.feedback-trend-bar .trend-bar {
+    width: 100%;
+    border-radius: 0.25rem 0.25rem 0 0;
+    min-height: 4px;
+    transition: height 0.3s ease;
+}
+
+.feedback-trend-bar .trend-label {
+    font-size: 0.75rem;
+    color: var(--color-base-content);
+    opacity: 0.5;
+}
+
+/* Thumbs display */
+.feedback-thumbs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.feedback-thumbs-up {
+    color: var(--color-success);
+}
+
+.feedback-thumbs-down {
+    color: var(--color-error);
+}
+
+/* Response card in recent list */
+.feedback-response-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+}
+
+.feedback-response-item + .feedback-response-item {
+    border-top: 1px solid var(--color-base-200);
+}
+
+/* NPS Category badges */
+.feedback-nps-promoter {
+    color: var(--color-success);
+}
+
+.feedback-nps-passive {
+    color: var(--color-warning);
+}
+
+.feedback-nps-detractor {
+    color: var(--color-error);
+}

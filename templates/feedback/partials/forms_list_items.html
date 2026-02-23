@@ -1,0 +1,95 @@
+{% load djicons i18n %}
+
+{% if feedback_forms %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for form in feedback_forms %}
+    <div class="card">
+        <div class="card-body p-5">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center {% if form.form_type == 'nps_10' %}bg-primary/10{% elif form.form_type == 'stars_5' %}bg-warning/10{% elif form.form_type == 'thumbs' %}bg-success/10{% else %}bg-base-200{% endif %}">
+                        {% if form.form_type == 'stars_5' or form.form_type == 'rating_5' %}
+                        {% icon "star-outline" css_class="text-xl text-warning" %}
+                        {% elif form.form_type == 'nps_10' %}
+                        {% icon "analytics-outline" css_class="text-xl text-primary" %}
+                        {% elif form.form_type == 'thumbs' %}
+                        {% icon "thumbs-up-outline" css_class="text-xl text-success" %}
+                        {% else %}
+                        {% icon "chatbubble-outline" css_class="text-xl text-base-content/60" %}
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-sm">{{ form.name }}</h3>
+                        <span class="badge badge-sm">{{ form.get_form_type_display }}</span>
+                    </div>
+                </div>
+                <!-- Active Toggle -->
+                <label class="toggle toggle-sm color-success">
+                    <input type="checkbox"
+                           {% if form.is_active %}checked{% endif %}
+                           hx-post="{% url 'feedback:form_toggle' form.id %}"
+                           hx-target="#forms-list-body"
+                           hx-swap="innerHTML">
+                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+            </div>
+
+            <!-- Description -->
+            {% if form.description %}
+            <p class="text-xs text-base-content/60 mb-3">{{ form.description|truncatewords:15 }}</p>
+            {% endif %}
+
+            <!-- Stats -->
+            <div class="flex items-center gap-4 mb-3 text-xs text-base-content/50">
+                <div class="flex items-center gap-1">
+                    {% icon "chatbubbles-outline" css_class="text-sm" %}
+                    <span>{{ form.total_responses }} {% trans "responses" %}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    {% icon "flash-outline" css_class="text-sm" %}
+                    <span>{{ form.get_trigger_type_display }}</span>
+                </div>
+            </div>
+
+            <!-- Trigger info -->
+            {% if form.trigger_type != 'manual' %}
+            <div class="text-xs text-base-content/40 mb-3">
+                {% icon "time-outline" css_class="text-sm" %}
+                {% blocktrans with hours=form.trigger_delay_hours %}{{ hours }}h delay{% endblocktrans %}
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2 pt-3 border-t border-base-200">
+                <button class="btn btn-ghost btn-sm flex-1"
+                        @click="openPanel('{% url 'feedback:form_edit' form_id=form.id %}')">
+                    {% icon "create-outline" %}
+                    {% trans "Edit" %}
+                </button>
+                <button class="btn btn-ghost btn-sm color-error"
+                        @click="deleteTarget = { id: '{{ form.id }}', name: '{{ form.name|escapejs }}', url: '{% url 'feedback:form_delete' form.id %}' }; deleteConfirm = true">
+                    {% icon "trash-outline" %}
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<!-- Empty State -->
+<div class="card">
+    <div class="card-body p-12 text-center">
+        <div class="text-base-content/30 mb-4">
+            {% icon "document-text-outline" css_class="text-5xl" %}
+        </div>
+        <h3 class="text-lg font-medium mb-2">{% trans "No feedback forms yet" %}</h3>
+        <p class="text-sm text-base-content/60 mb-4">{% trans "Create your first feedback form to start collecting customer responses." %}</p>
+        <button class="btn color-primary"
+                @click="openPanel('{% url 'feedback:form_add' %}')">
+            {% icon "add-outline" %}
+            {% trans "Create First Form" %}
+        </button>
+    </div>
+</div>
+{% endif %}
