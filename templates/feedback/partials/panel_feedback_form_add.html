@@ -1,0 +1,82 @@
+{% load djicons i18n %}
+
+<div class="side-sheet-header">
+    <h3 class="sheet-title">{% trans "Add Feedbackform" %}</h3>
+    <button class="sheet-close" @click="closePanel()">{% icon "close-outline" %}</button>
+</div>
+
+<div class="side-sheet-content">
+    <form id="add-feedback_form-form"
+          hx-post="{% url 'feedback:feedback_form_add' %}"
+          hx-target="#datatable-body"
+          hx-swap="innerHTML"
+          @htmx:after-request="closePanel()"
+          class="flex flex-col gap-4 p-6">
+        {% csrf_token %}
+
+        {% if error %}
+        <div class="callout callout-error">
+            <div class="callout-content"><span class="callout-text">{{ error }}</span></div>
+        </div>
+        {% endif %}
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Name" %}</label>
+            <input type="text" name="name" class="input input-sm w-full" placeholder="{% trans 'Name' %}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Description" %}</label>
+            <textarea name="description" class="textarea textarea-sm w-full" rows="3"></textarea>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Form Type" %}</label>
+            <select name="form_type" class="select select-sm w-full">
+                <option value="">{% trans "Select..." %}</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Trigger Type" %}</label>
+            <select name="trigger_type" class="select select-sm w-full">
+                <option value="">{% trans "Select..." %}</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Trigger Delay Hours" %}</label>
+            <input type="number" name="trigger_delay_hours" class="input input-sm w-full"  placeholder="0">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Include Comment" %}</label>
+            <label class="toggle color-success">
+                <input type="checkbox" name="include_comment">
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Is Active" %}</label>
+            <label class="toggle color-success">
+                <input type="checkbox" name="is_active">
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Thank You Message" %}</label>
+            <textarea name="thank_you_message" class="textarea textarea-sm w-full" rows="3"></textarea>
+        </div>
+    </form>
+</div>
+
+<div class="side-sheet-footer">
+    <div class="flex justify-end gap-2">
+        <button type="button" class="btn btn-ghost btn-sm" @click="closePanel()">{% trans "Cancel" %}</button>
+        <button type="submit" form="add-feedback_form-form" class="btn btn-sm color-primary">
+            {% icon "add-outline" %} {% trans "Add" %}
+        </button>
+    </div>
+</div>

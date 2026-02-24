@@ -1,0 +1,105 @@
+{% load djicons i18n %}
+
+<div x-data="{ confirmDelete: false }">
+
+<div class="side-sheet-header">
+    <h3 class="sheet-title">{% trans "Edit Feedbackresponse" %}</h3>
+    <button class="sheet-close" @click="closePanel()">{% icon "close-outline" %}</button>
+</div>
+
+<div class="side-sheet-content">
+    <form id="edit-feedback_response-form"
+          hx-post="{% url 'feedback:feedback_response_edit' obj.id %}"
+          hx-target="#datatable-body"
+          hx-swap="innerHTML"
+          @htmx:after-request="closePanel()"
+          class="flex flex-col gap-4 p-6">
+        {% csrf_token %}
+
+        {% if error %}
+        <div class="callout callout-error">
+            <div class="callout-content"><span class="callout-text">{{ error }}</span></div>
+        </div>
+        {% endif %}
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Score" %}</label>
+            <input type="number" name="score" class="input input-sm w-full" value="{{ obj.score }}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Comment" %}</label>
+            <textarea name="comment" class="textarea textarea-sm w-full" rows="3">{{ obj.comment }}</textarea>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Status" %}</label>
+            <select name="status" class="select select-sm w-full">
+                <option value="">---</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Reviewed By" %}</label>
+            <input type="text" name="reviewed_by" class="input input-sm w-full" value="{{ obj.reviewed_by }}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Reviewed At" %}</label>
+            <input type="datetime-local" name="reviewed_at" class="input input-sm w-full" value="{{ obj.reviewed_at }}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Staff Notes" %}</label>
+            <textarea name="staff_notes" class="textarea textarea-sm w-full" rows="3">{{ obj.staff_notes }}</textarea>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Related Sale" %}</label>
+            <input type="text" name="related_sale" class="input input-sm w-full" value="{{ obj.related_sale }}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Related Appointment" %}</label>
+            <input type="text" name="related_appointment" class="input input-sm w-full" value="{{ obj.related_appointment }}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Related Ticket" %}</label>
+            <input type="text" name="related_ticket" class="input input-sm w-full" value="{{ obj.related_ticket }}">
+        </div>
+    </form>
+
+    <div class="border-t border-base-300 pt-4 mt-4 px-6 pb-6">
+        <h4 class="font-semibold text-sm mb-3 text-error">{% trans "Danger Zone" %}</h4>
+        <template x-if="!confirmDelete">
+            <button type="button" class="btn btn-sm btn-outline color-error w-full" @click="confirmDelete = true">
+                {% icon "trash-outline" %} {% trans "Delete" %}
+            </button>
+        </template>
+        <template x-if="confirmDelete">
+            <div>
+                <p class="text-error text-sm font-semibold mb-3">{% trans "Are you sure?" %}</p>
+                <div class="flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline flex-1" @click="confirmDelete = false">{% trans "Cancel" %}</button>
+                    <button type="button" class="btn btn-sm color-error flex-1"
+                            hx-post="{% url 'feedback:feedback_response_delete' obj.id %}"
+                            hx-target="#datatable-body" hx-swap="innerHTML" @click="closePanel()">
+                        {% icon "trash-outline" %} {% trans "Delete" %}
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
+
+<div class="side-sheet-footer">
+    <div class="flex justify-end gap-2">
+        <button type="button" class="btn btn-ghost btn-sm" @click="closePanel()">{% trans "Cancel" %}</button>
+        <button type="submit" form="edit-feedback_response-form" class="btn btn-sm color-primary">
+            {% icon "checkmark-outline" %} {% trans "Save" %}
+        </button>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,79 @@
+{% load djicons i18n %}
+
+<div class="side-sheet-header">
+    <h3 class="sheet-title">{% trans "Add Feedbackresponse" %}</h3>
+    <button class="sheet-close" @click="closePanel()">{% icon "close-outline" %}</button>
+</div>
+
+<div class="side-sheet-content">
+    <form id="add-feedback_response-form"
+          hx-post="{% url 'feedback:feedback_response_add' %}"
+          hx-target="#datatable-body"
+          hx-swap="innerHTML"
+          @htmx:after-request="closePanel()"
+          class="flex flex-col gap-4 p-6">
+        {% csrf_token %}
+
+        {% if error %}
+        <div class="callout callout-error">
+            <div class="callout-content"><span class="callout-text">{{ error }}</span></div>
+        </div>
+        {% endif %}
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Score" %}</label>
+            <input type="number" name="score" class="input input-sm w-full"  placeholder="0">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Comment" %}</label>
+            <textarea name="comment" class="textarea textarea-sm w-full" rows="3"></textarea>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Status" %}</label>
+            <select name="status" class="select select-sm w-full">
+                <option value="">{% trans "Select..." %}</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Reviewed By" %}</label>
+            <input type="text" name="reviewed_by" class="input input-sm w-full" placeholder="{% trans 'Reviewed By' %}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Reviewed At" %}</label>
+            <input type="datetime-local" name="reviewed_at" class="input input-sm w-full">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Staff Notes" %}</label>
+            <textarea name="staff_notes" class="textarea textarea-sm w-full" rows="3"></textarea>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Related Sale" %}</label>
+            <input type="text" name="related_sale" class="input input-sm w-full" placeholder="{% trans 'Related Sale' %}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Related Appointment" %}</label>
+            <input type="text" name="related_appointment" class="input input-sm w-full" placeholder="{% trans 'Related Appointment' %}">
+        </div>
+
+        <div>
+            <label class="text-sm font-medium mb-1 block">{% trans "Related Ticket" %}</label>
+            <input type="text" name="related_ticket" class="input input-sm w-full" placeholder="{% trans 'Related Ticket' %}">
+        </div>
+    </form>
+</div>
+
+<div class="side-sheet-footer">
+    <div class="flex justify-end gap-2">
+        <button type="button" class="btn btn-ghost btn-sm" @click="closePanel()">{% trans "Cancel" %}</button>
+        <button type="submit" form="add-feedback_response-form" class="btn btn-sm color-primary">
+            {% icon "add-outline" %} {% trans "Add" %}
+        </button>
+    </div>
+</div>

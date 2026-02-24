@@ -7,19 +7,20 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard, name='dashboard'),
 
-    # Responses
-    path('responses/', views.responses_list, name='responses'),
-    path('responses/<uuid:response_id>/', views.response_detail, name='response_detail'),
-    path('responses/<uuid:response_id>/review/', views.response_review, name='response_review'),
-    path('responses/<uuid:response_id>/delete/', views.response_delete, name='response_delete'),
-    path('responses/bulk/', views.response_bulk_action, name='bulk_action'),
+    # FeedbackForm
+    path('feedback_forms/', views.feedback_forms_list, name='feedback_forms_list'),
+    path('feedback_forms/add/', views.feedback_form_add, name='feedback_form_add'),
+    path('feedback_forms/<uuid:pk>/edit/', views.feedback_form_edit, name='feedback_form_edit'),
+    path('feedback_forms/<uuid:pk>/delete/', views.feedback_form_delete, name='feedback_form_delete'),
+    path('feedback_forms/<uuid:pk>/toggle/', views.feedback_form_toggle_status, name='feedback_form_toggle_status'),
+    path('feedback_forms/bulk/', views.feedback_forms_bulk_action, name='feedback_forms_bulk_action'),
 
-    # Forms
-    path('forms/', views.forms_list, name='forms'),
-    path('forms/add/', views.form_add, name='form_add'),
-    path('forms/<uuid:form_id>/edit/', views.form_edit, name='form_edit'),
-    path('forms/<uuid:form_id>/delete/', views.form_delete, name='form_delete'),
-    path('forms/<uuid:form_id>/toggle/', views.form_toggle, name='form_toggle'),
+    # FeedbackResponse
+    path('feedback_responses/', views.feedback_responses_list, name='feedback_responses_list'),
+    path('feedback_responses/add/', views.feedback_response_add, name='feedback_response_add'),
+    path('feedback_responses/<uuid:pk>/edit/', views.feedback_response_edit, name='feedback_response_edit'),
+    path('feedback_responses/<uuid:pk>/delete/', views.feedback_response_delete, name='feedback_response_delete'),
+    path('feedback_responses/bulk/', views.feedback_responses_bulk_action, name='feedback_responses_bulk_action'),
 
     # Settings
     path('settings/', views.settings_view, name='settings'),
