@@ -7,6 +7,11 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard, name='dashboard'),
 
+    # Navigation tab aliases
+    path('responses/', views.feedback_forms_list, name='responses'),
+    path('forms/', views.dashboard, name='forms'),
+
+
     # FeedbackForm
     path('feedback_forms/', views.feedback_forms_list, name='feedback_forms_list'),
     path('feedback_forms/add/', views.feedback_form_add, name='feedback_form_add'),
