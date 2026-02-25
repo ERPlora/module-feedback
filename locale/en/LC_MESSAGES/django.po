@@ -1,0 +1,284 @@
+# English translations for Feedback
+# Copyright (C) 2025
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-25 00:00+0000\n"
+"PO-Revision-Date: 2026-02-25 00:00+0000\n"
+"Last-Translator: ERPlora Team <info@erplora.com>\n"
+"Language: en\n"
+"Language-Team: English\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: module.py
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "Customer feedback, NPS scores and satisfaction surveys"
+msgstr "Customer feedback, NPS scores and satisfaction surveys"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Responses"
+msgstr "Responses"
+
+msgid "Forms"
+msgstr "Forms"
+
+msgid "Settings"
+msgstr "Settings"
+
+#: models.py - FeedbackForm FORM_TYPE_CHOICES
+msgid "1-5 Rating"
+msgstr "1-5 Rating"
+
+msgid "NPS (0-10)"
+msgstr "NPS (0-10)"
+
+msgid "5 Stars"
+msgstr "5 Stars"
+
+msgid "Thumbs Up/Down"
+msgstr "Thumbs Up/Down"
+
+msgid "Text Only"
+msgstr "Text Only"
+
+#: models.py - TRIGGER_TYPE_CHOICES
+msgid "Manual"
+msgstr "Manual"
+
+msgid "After Sale"
+msgstr "After Sale"
+
+msgid "After Appointment"
+msgstr "After Appointment"
+
+msgid "After Support Ticket"
+msgstr "After Support Ticket"
+
+#: models.py - FeedbackForm fields
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Form Type"
+msgstr "Form Type"
+
+msgid "Trigger"
+msgstr "Trigger"
+
+msgid "Trigger Delay (hours)"
+msgstr "Trigger Delay (hours)"
+
+msgid "Hours to wait after the event before sending the feedback request"
+msgstr "Hours to wait after the event before sending the feedback request"
+
+msgid "Include Comment Field"
+msgstr "Include Comment Field"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Thank You Message"
+msgstr "Thank You Message"
+
+msgid "Message shown after the customer submits feedback"
+msgstr "Message shown after the customer submits feedback"
+
+#: models.py - FeedbackResponse STATUS_CHOICES
+msgid "New"
+msgstr "New"
+
+msgid "Reviewed"
+msgstr "Reviewed"
+
+msgid "Actioned"
+msgstr "Actioned"
+
+#: models.py - FeedbackResponse fields
+msgid "Form"
+msgstr "Form"
+
+msgid "Customer"
+msgstr "Customer"
+
+msgid "Score"
+msgstr "Score"
+
+msgid "Numeric score (0-10 for NPS, 1-5 for ratings, 0/1 for thumbs)"
+msgstr "Numeric score (0-10 for NPS, 1-5 for ratings, 0/1 for thumbs)"
+
+msgid "Comment"
+msgstr "Comment"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Reviewed By"
+msgstr "Reviewed By"
+
+msgid "Reviewed At"
+msgstr "Reviewed At"
+
+msgid "Staff Notes"
+msgstr "Staff Notes"
+
+msgid "Related Sale"
+msgstr "Related Sale"
+
+msgid "Related Appointment"
+msgstr "Related Appointment"
+
+msgid "Related Ticket"
+msgstr "Related Ticket"
+
+msgid "Anonymous"
+msgstr "Anonymous"
+
+#: models.py - FeedbackSettings
+msgid "Auto-send after sale"
+msgstr "Auto-send after sale"
+
+msgid "Automatically send feedback request after a completed sale"
+msgstr "Automatically send feedback request after a completed sale"
+
+msgid "Auto-send after appointment"
+msgstr "Auto-send after appointment"
+
+msgid "Automatically send feedback request after a completed appointment"
+msgstr "Automatically send feedback request after a completed appointment"
+
+msgid "Default Form"
+msgstr "Default Form"
+
+msgid "Default feedback form to use when auto-sending"
+msgstr "Default feedback form to use when auto-sending"
+
+msgid "Minimum days between requests"
+msgstr "Minimum days between requests"
+
+msgid "Minimum number of days to wait before sending another feedback request to the same customer"
+msgstr "Minimum number of days to wait before sending another feedback request to the same customer"
+
+msgid "Feedback Settings"
+msgstr "Feedback Settings"
+
+#: templates - responses list
+msgid "Date"
+msgstr "Date"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Show"
+msgstr "Show"
+
+msgid "per page"
+msgstr "per page"
+
+#: templates - responses list blocktrans
+msgid "Showing %(start)s-%(end)s of %(total)s"
+msgstr "Showing %(start)s-%(end)s of %(total)s"
+
+msgid "Showing %(start)s-%(end)s of %(total)s responses"
+msgstr "Showing %(start)s-%(end)s of %(total)s responses"
+
+msgid "No items yet"
+msgstr "No items yet"
+
+msgid "Add your first item to get started"
+msgstr "Add your first item to get started"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "No responses found"
+msgstr "No responses found"
+
+msgid "No feedback responses yet"
+msgstr "No feedback responses yet"
+
+msgid "Try a different search term or filter"
+msgstr "Try a different search term or filter"
+
+msgid "Responses will appear here when customers submit feedback"
+msgstr "Responses will appear here when customers submit feedback"
+
+msgid "Search responses..."
+msgstr "Search responses..."
+
+msgid "All Status"
+msgstr "All Status"
+
+msgid "All Forms"
+msgstr "All Forms"
+
+msgid "selected"
+msgstr "selected"
+
+msgid "Mark Reviewed"
+msgstr "Mark Reviewed"
+
+msgid "Mark Actioned"
+msgstr "Mark Actioned"
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Delete Response"
+msgstr "Delete Response"
+
+msgid "Are you sure you want to delete this feedback response? This action cannot be undone."
+msgstr "Are you sure you want to delete this feedback response? This action cannot be undone."
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "View Details"
+msgstr "View Details"
+
+msgid "customers.Customer"
+msgstr "Customer"
+
+#: templates - form edit
+msgid "Edit Feedback Form"
+msgstr "Edit Feedback Form"
+
+msgid "Form name"
+msgstr "Form name"
+
+msgid "Optional description..."
+msgstr "Optional description..."
+
+msgid "Hours to wait after the event before sending"
+msgstr "Hours to wait after the event before sending"
+
+msgid "Allow customers to add a text comment"
+msgstr "Allow customers to add a text comment"
+
+msgid "Form is available for use"
+msgstr "Form is available for use"
+
+msgid "Thank you for your feedback!"
+msgstr "Thank you for your feedback!"
+
+msgid "Total Responses"
+msgstr "Total Responses"
+
+msgid "Created"
+msgstr "Created"
