@@ -34,3 +34,20 @@ PERMISSIONS = [
     'feedback.delete_form',
     'feedback.manage_settings',
 ]
+
+ROLE_PERMISSIONS = {
+    "admin": ["*"],
+    "manager": [
+        "add_form",
+        "add_response",
+        "change_form",
+        "change_response",
+        "view_form",
+        "view_response",
+    ],
+    "employee": [
+        "add_response",
+        "view_form",
+        "view_response",
+    ],
+}
