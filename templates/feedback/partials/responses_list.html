@@ -110,7 +110,7 @@
                 <td class="datatable-td datatable-td-actions" onclick="event.stopPropagation();">
                     <div class="datatable-row-actions">
                         <button class="datatable-row-action"
-                                @click="openPanel('{% url 'feedback:response_detail' response_id=resp.id %}')"
+                                hx-get="{% url 'feedback:response_detail' response_id=resp.id %}" hx-target="#main-content-area" hx-push-url="true"
                                 title="{% trans 'View Details' %}">
                             {% icon "eye-outline" %}
                         </button>

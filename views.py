@@ -3,6 +3,8 @@ Feedback Module Views
 """
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
+from django.http import HttpResponse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render as django_render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -114,6 +116,7 @@ def feedback_forms_list(request):
     }
 
 @login_required
+@htmx_view('feedback/pages/feedback_form_add.html', 'feedback/partials/feedback_form_add_content.html')
 def feedback_form_add(request):
     hub_id = request.session.get('hub_id')
     if request.method == 'POST':
@@ -135,10 +138,13 @@ def feedback_form_add(request):
         obj.is_active = is_active
         obj.thank_you_message = thank_you_message
         obj.save()
-        return _render_feedback_forms_list(request, hub_id)
-    return django_render(request, 'feedback/partials/panel_feedback_form_add.html', {})
+        response = HttpResponse(status=204)
+        response['HX-Redirect'] = reverse('feedback:feedback_forms_list')
+        return response
+    return {}
 
 @login_required
+@htmx_view('feedback/pages/feedback_form_edit.html', 'feedback/partials/feedback_form_edit_content.html')
 def feedback_form_edit(request, pk):
     hub_id = request.session.get('hub_id')
     obj = get_object_or_404(FeedbackForm, pk=pk, hub_id=hub_id, is_deleted=False)
@@ -153,7 +159,7 @@ def feedback_form_edit(request, pk):
         obj.thank_you_message = request.POST.get('thank_you_message', '').strip()
         obj.save()
         return _render_feedback_forms_list(request, hub_id)
-    return django_render(request, 'feedback/partials/panel_feedback_form_edit.html', {'obj': obj})
+    return {'obj': obj}
 
 @login_required
 @require_POST
@@ -271,6 +277,7 @@ def feedback_responses_list(request):
     }
 
 @login_required
+@htmx_view('feedback/pages/feedback_response_add.html', 'feedback/partials/feedback_response_add_content.html')
 def feedback_response_add(request):
     hub_id = request.session.get('hub_id')
     if request.method == 'POST':
@@ -295,9 +302,10 @@ def feedback_response_add(request):
         obj.related_ticket = related_ticket
         obj.save()
         return _render_feedback_responses_list(request, hub_id)
-    return django_render(request, 'feedback/partials/panel_feedback_response_add.html', {})
+    return {}
 
 @login_required
+@htmx_view('feedback/pages/feedback_response_edit.html', 'feedback/partials/feedback_response_edit_content.html')
 def feedback_response_edit(request, pk):
     hub_id = request.session.get('hub_id')
     obj = get_object_or_404(FeedbackResponse, pk=pk, hub_id=hub_id, is_deleted=False)
@@ -313,7 +321,7 @@ def feedback_response_edit(request, pk):
         obj.related_ticket = request.POST.get('related_ticket', '').strip()
         obj.save()
         return _render_feedback_responses_list(request, hub_id)
-    return django_render(request, 'feedback/partials/panel_feedback_response_edit.html', {'obj': obj})
+    return {'obj': obj}
 
 @login_required
 @require_POST

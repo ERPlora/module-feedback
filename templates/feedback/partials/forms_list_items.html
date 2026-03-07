@@ -63,7 +63,7 @@
             <!-- Actions -->
             <div class="flex items-center gap-2 pt-3 border-t border-base-200">
                 <button class="btn btn-ghost btn-sm flex-1"
-                        @click="openPanel('{% url 'feedback:form_edit' form_id=form.id %}')">
+                        hx-get="{% url 'feedback:form_edit' form_id=form.id %}" hx-target="#main-content-area" hx-push-url="true">
                     {% icon "create-outline" %}
                     {% trans "Edit" %}
                 </button>
@@ -86,7 +86,7 @@
         <h3 class="text-lg font-medium mb-2">{% trans "No feedback forms yet" %}</h3>
         <p class="text-sm text-base-content/60 mb-4">{% trans "Create your first feedback form to start collecting customer responses." %}</p>
         <button class="btn color-primary"
-                @click="openPanel('{% url 'feedback:form_add' %}')">
+                hx-get="{% url 'feedback:form_add' %}" hx-target="#main-content-area" hx-push-url="true">
             {% icon "add-outline" %}
             {% trans "Create First Form" %}
         </button>

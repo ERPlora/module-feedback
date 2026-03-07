@@ -3,7 +3,7 @@
 <!-- Header -->
 <div class="side-sheet-header">
     <h3 class="sheet-title">{% trans "Response Details" %}</h3>
-    <button class="sheet-close" @click="closePanel()">
+    <button class="sheet-close">
         {% icon "close-outline" %}
     </button>
 </div>
@@ -143,8 +143,7 @@
         <form id="review-form"
               hx-post="{% url 'feedback:response_review' response_id=response.id %}"
               hx-target="#datatable-body"
-              hx-swap="innerHTML"
-              @htmx:after-request="closePanel()">
+              hx-swap="innerHTML">
             {% csrf_token %}
             <div>
                 <label class="text-sm font-medium mb-1 block text-base-content/60">{% trans "Staff Notes" %}</label>
@@ -161,7 +160,7 @@
 <!-- Footer -->
 <div class="side-sheet-footer">
     <div class="flex justify-between gap-2 w-full">
-        <button class="btn btn-ghost btn-sm" @click="closePanel()">
+        <button class="btn btn-ghost btn-sm">
             {% trans "Close" %}
         </button>
         <div class="flex gap-2">

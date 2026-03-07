@@ -1,0 +1,106 @@
+{% load djicons i18n %}
+<div data-back-url="{% url 'feedback:forms' %}" hidden></div>
+
+<div class="p-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">{% trans "New Feedback Form" %}</h1>
+        <div class="flex gap-2">
+            <a class="btn btn-ghost btn-sm"
+               hx-get="{% url 'feedback:forms' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" form="add-form-form" class="btn btn-sm color-primary">
+                {% icon "checkmark-outline" %}
+                {% trans "Save" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form id="add-form-form"
+          hx-post="{% url 'feedback:form_add' %}" class="max-w-2xl">
+        {% csrf_token %}
+        <div class="card mb-4">
+            <div class="card-body flex flex-col gap-4">
+                <!-- Name -->
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Name" %} *</label>
+                <input type="text" name="name" class="input input-sm w-full"
+                placeholder="{% trans 'e.g. Post-Sale Satisfaction' %}" required>
+                </div>
+
+                <!-- Description -->
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Description" %}</label>
+                <textarea name="description" class="textarea textarea-sm w-full" rows="2"
+                placeholder="{% trans 'Optional description...' %}"></textarea>
+                </div>
+
+                <!-- Form Type -->
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Form Type" %}</label>
+                <select name="form_type" class="select select-sm w-full">
+                <option value="stars_5">{% trans "5 Stars" %}</option>
+                <option value="rating_5">{% trans "1-5 Rating" %}</option>
+                <option value="nps_10">{% trans "NPS (0-10)" %}</option>
+                <option value="thumbs">{% trans "Thumbs Up/Down" %}</option>
+                <option value="text_only">{% trans "Text Only" %}</option>
+                </select>
+                </div>
+
+                <!-- Trigger Type -->
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Trigger" %}</label>
+                <select name="trigger_type" class="select select-sm w-full">
+                <option value="manual">{% trans "Manual" %}</option>
+                <option value="post_sale">{% trans "After Sale" %}</option>
+                <option value="post_appointment">{% trans "After Appointment" %}</option>
+                <option value="post_ticket">{% trans "After Support Ticket" %}</option>
+                </select>
+                </div>
+
+                <!-- Trigger Delay -->
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Trigger Delay (hours)" %}</label>
+                <input type="number" name="trigger_delay_hours" class="input input-sm w-full"
+                value="24" min="0" placeholder="24">
+                <p class="text-xs text-base-content/50 mt-1">{% trans "Hours to wait after the event before sending" %}</p>
+                </div>
+
+                <!-- Include Comment -->
+                <div class="flex items-center justify-between">
+                <div>
+                <label class="text-sm font-medium block">{% trans "Include Comment Field" %}</label>
+                <p class="text-xs text-base-content/50">{% trans "Allow customers to add a text comment" %}</p>
+                </div>
+                <label class="toggle toggle-sm color-primary">
+                <input type="checkbox" name="include_comment" checked>
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+                </div>
+
+                <!-- Active -->
+                <div class="flex items-center justify-between">
+                <div>
+                <label class="text-sm font-medium block">{% trans "Active" %}</label>
+                <p class="text-xs text-base-content/50">{% trans "Form is available for use" %}</p>
+                </div>
+                <label class="toggle toggle-sm color-success">
+                <input type="checkbox" name="is_active" checked>
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+                </div>
+
+                <!-- Thank You Message -->
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Thank You Message" %}</label>
+                <textarea name="thank_you_message" class="textarea textarea-sm w-full" rows="2"
+                placeholder="{% trans 'Thank you for your feedback!' %}"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

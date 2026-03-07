@@ -1,7 +1,6 @@
 {% load djicons i18n %}
 
 <div x-data="{
-    panelOpen: false,
     selectedIds: [],
     selectAll: false,
     deleteConfirm: false,
@@ -18,13 +17,6 @@
         this.selectAll = !this.selectAll;
     },
     clearSelection() { this.selectedIds = []; this.selectAll = false; },
-    openPanel(url) {
-        htmx.ajax('GET', url, { target: '#response-panel-content', swap: 'innerHTML' });
-        this.panelOpen = true;
-    },
-    closePanel() {
-        this.panelOpen = false;
-    },
     confirmDelete() {
         if (this.deleteTarget) {
             htmx.ajax('POST', this.deleteTarget.url, {
@@ -137,12 +129,6 @@
             {% include "feedback/partials/responses_list.html" %}
         </div>
     </div>
-
-    <!-- Side Sheet -->
-    <div class="sheet-backdrop" :class="{ 'is-open': panelOpen }" @click.self="closePanel()">
-        <div class="side-sheet side-sheet-right" id="response-panel-content">
-            <!-- Content loaded via HTMX -->
-        </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
