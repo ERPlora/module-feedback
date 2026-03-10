@@ -17,7 +17,7 @@ from apps.modules_runtime.navigation import with_module_nav
 
 from .models import FeedbackForm, FeedbackResponse, FeedbackSettings
 
-PER_PAGE_CHOICES = [10, 25, 50, 100]
+PER_PAGE_CHOICES = [12, 24, 48, 96, 0]
 
 
 # ======================================================================
@@ -51,7 +51,7 @@ FEEDBACK_FORM_SORT_FIELDS = {
 
 def _build_feedback_forms_context(hub_id, per_page=10):
     qs = FeedbackForm.objects.filter(hub_id=hub_id, is_deleted=False).order_by('name')
-    paginator = Paginator(qs, per_page)
+    paginator = Paginator(qs, per_page if per_page > 0 else max(qs.count(), 1))
     page_obj = paginator.get_page(1)
     return {
         'feedback_forms': page_obj,
@@ -77,9 +77,9 @@ def feedback_forms_list(request):
     sort_dir = request.GET.get('dir', 'asc')
     page_number = request.GET.get('page', 1)
     current_view = request.GET.get('view', 'table')
-    per_page = int(request.GET.get('per_page', 10))
+    per_page = int(request.GET.get('per_page', 12))
     if per_page not in PER_PAGE_CHOICES:
-        per_page = 10
+        per_page = 12
 
     qs = FeedbackForm.objects.filter(hub_id=hub_id, is_deleted=False)
 
@@ -99,7 +99,7 @@ def feedback_forms_list(request):
             return export_to_csv(qs, fields=fields, headers=headers, filename='feedback_forms.csv')
         return export_to_excel(qs, fields=fields, headers=headers, filename='feedback_forms.xlsx')
 
-    paginator = Paginator(qs, per_page)
+    paginator = Paginator(qs, per_page if per_page > 0 else max(qs.count(), 1))
     page_obj = paginator.get_page(page_number)
 
     if request.htmx and request.htmx.target == 'datatable-body':
@@ -212,7 +212,7 @@ FEEDBACK_RESPONSE_SORT_FIELDS = {
 
 def _build_feedback_responses_context(hub_id, per_page=10):
     qs = FeedbackResponse.objects.filter(hub_id=hub_id, is_deleted=False).order_by('form')
-    paginator = Paginator(qs, per_page)
+    paginator = Paginator(qs, per_page if per_page > 0 else max(qs.count(), 1))
     page_obj = paginator.get_page(1)
     return {
         'feedback_responses': page_obj,
@@ -238,9 +238,9 @@ def feedback_responses_list(request):
     sort_dir = request.GET.get('dir', 'asc')
     page_number = request.GET.get('page', 1)
     current_view = request.GET.get('view', 'table')
-    per_page = int(request.GET.get('per_page', 10))
+    per_page = int(request.GET.get('per_page', 12))
     if per_page not in PER_PAGE_CHOICES:
-        per_page = 10
+        per_page = 12
 
     qs = FeedbackResponse.objects.filter(hub_id=hub_id, is_deleted=False)
 
@@ -260,7 +260,7 @@ def feedback_responses_list(request):
             return export_to_csv(qs, fields=fields, headers=headers, filename='feedback_responses.csv')
         return export_to_excel(qs, fields=fields, headers=headers, filename='feedback_responses.xlsx')
 
-    paginator = Paginator(qs, per_page)
+    paginator = Paginator(qs, per_page if per_page > 0 else max(qs.count(), 1))
     page_obj = paginator.get_page(page_number)
 
     if request.htmx and request.htmx.target == 'datatable-body':
